@@ -20,11 +20,13 @@ const NumberField: React.FC<NumberFieldProps> = ({ label, value, min, max, onCha
     <label className={styles.settingLabel}>{label}</label>
     <div className={styles.settingControl}>
       <button
+        type="button"
         className={styles.stepBtn}
         onClick={() => onChange(Math.max(min, value - 1))}
       >−</button>
       <span className={styles.settingValue}>{value}m</span>
       <button
+        type="button"
         className={styles.stepBtn}
         onClick={() => onChange(Math.min(max, value + 1))}
       >+</button>
@@ -42,6 +44,7 @@ const Toggle: React.FC<ToggleProps> = ({ label, checked, onChange }) => (
   <div className={styles.settingRow}>
     <label className={styles.settingLabel}>{label}</label>
     <button
+      type="button"
       className={`${styles.toggle} ${checked ? styles.toggleOn : ''}`}
       onClick={() => onChange(!checked)}
       role="switch"
