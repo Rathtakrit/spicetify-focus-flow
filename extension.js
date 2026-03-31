@@ -1,0 +1,1 @@
+(async()=>{for(;!Spicetify.React||!Spicetify.ReactDOM;)await new Promise(i=>setTimeout(i,10));(async()=>{for(;null==Spicetify||!Spicetify.showNotification;)await new Promise(i=>setTimeout(i,100));var i="focus-flow:welcomed";Spicetify.LocalStorage.get(i)||(Spicetify.showNotification("Focus Flow ready — stay in the zone"),Spicetify.LocalStorage.set(i,"1"))})()})();

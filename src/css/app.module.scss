@@ -1,34 +1,81 @@
-/* Focus Flow — Spicetify Custom App Styles */
+/* ─── Focus Flow — Brain.fm-inspired dark UI ─────────────────────────────── */
 
+/* Base */
 .app {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
-  color: var(--spice-text, #fff);
-  background: var(--spice-main, #121212);
+  min-height: 100%;
+  color: #f1f5f9;
+  background: #0d0f1a;
   overflow-y: auto;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
 }
 
-/* ── Header ── */
+/* ─── Ambient orbs ──────────────────────────────────────────────────────── */
+.orbA,
+.orbB {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: 0.12;
+  z-index: 0;
+  animation: orbDrift 20s ease-in-out infinite;
+}
+.orbA {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #6366f1, #4f46e5);
+  top: -15%;
+  right: -10%;
+}
+.orbB {
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, #14b8a6, #0891b2);
+  bottom: -10%;
+  left: -8%;
+  animation-delay: -10s;
+  animation-direction: reverse;
+}
+@keyframes orbDrift {
+  0%, 100% { transform: translate(0, 0); }
+  33%       { transform: translate(20px, -20px); }
+  66%       { transform: translate(-15px, 15px); }
+}
+
+/* ─── Header ────────────────────────────────────────────────────────────── */
 .header {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 32px 0;
-  flex-shrink: 0;
+  padding: 20px 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.logoGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .appName {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--spice-text, #fff);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #e2e8f0;
 }
 
 .tabs {
   display: flex;
-  background: rgba(255, 255, 255, 0.07);
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
   padding: 3px;
   gap: 2px;
 }
@@ -36,321 +83,393 @@
 .tab {
   background: transparent;
   border: none;
-  color: var(--spice-subtext, rgba(255, 255, 255, 0.6));
-  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8125rem;
   font-weight: 500;
-  padding: 6px 18px;
-  border-radius: 17px;
+  padding: 5px 16px;
+  border-radius: 18px;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
-
-  &:hover {
-    color: var(--spice-text, #fff);
-  }
+  letter-spacing: 0.01em;
+  &:hover { color: rgba(255, 255, 255, 0.75); }
 }
 
 .tabActive {
-  background: var(--spice-button, #1db954);
-  color: #000;
-
-  &:hover {
-    color: #000;
-  }
+  background: rgba(99, 102, 241, 0.85);
+  color: #fff;
+  &:hover { color: #fff; }
 }
 
-/* ── Content ── */
+/* ─── Content ───────────────────────────────────────────────────────────── */
 .content {
+  position: relative;
+  z-index: 1;
   flex: 1;
-  padding: 24px 32px 32px;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
+  padding: 28px 28px 36px;
 }
 
-/* ── Timer Page ── */
-.timerPage {
+/* ─── Timer Card (glassmorphic) ─────────────────────────────────────────── */
+.timerCard {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  padding-top: 8px;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 36px 24px 32px;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
+/* per-phase ambient glow inside the card */
+.ambientGlow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 24px;
+  opacity: 0.5;
+  transition: background 1.2s ease;
+}
+.ambientGlowWork {
+  background: radial-gradient(ellipse at 50% 0%, rgba(99, 102, 241, 0.18) 0%, transparent 70%);
+}
+.ambientGlowBreak {
+  background: radial-gradient(ellipse at 50% 0%, rgba(20, 184, 166, 0.16) 0%, transparent 70%);
+}
+
+/* ─── Phase label ───────────────────────────────────────────────────────── */
 .phaseLabel {
-  font-size: 1.125rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  color: var(--spice-subtext, rgba(255, 255, 255, 0.7));
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
 }
 
-/* ── Ring ── */
+/* ─── Ring ──────────────────────────────────────────────────────────────── */
 .ringWrap {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 260px;
+  height: 260px;
 }
 
-.ringTime {
+.ringsvg {
+  position: absolute;
+  inset: 0;
+}
+
+.ringCenter {
   position: absolute;
   inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 2.75rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--spice-text, #fff);
+  gap: 8px;
 }
 
-/* ── Session dots ── */
+.ringTime {
+  font-size: 3.5rem;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  color: #f8fafc;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace;
+}
+
+/* ─── Now Playing ───────────────────────────────────────────────────────── */
+.nowPlaying {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  max-width: 160px;
+}
+
+.nowPlayingTitle {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+  text-align: center;
+}
+
+.nowPlayingArtist {
+  font-size: 0.625rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+  text-align: center;
+}
+
+/* ─── Session dots ──────────────────────────────────────────────────────── */
 .sessionDots {
   display: flex;
-  gap: 8px;
-  margin-top: 4px;
+  gap: 7px;
 }
 
-.sessionDot {
-  width: 8px;
-  height: 8px;
+.dot {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  transition: background 0.3s;
+  background: rgba(255, 255, 255, 0.15);
+  transition: background 0.4s, transform 0.3s;
 }
 
-.sessionDotFilled {
-  background: var(--spice-button, #1db954);
+.dotFilled {
+  background: #6366f1;
+  transform: scale(1.2);
+  box-shadow: 0 0 6px rgba(99, 102, 241, 0.6);
 }
 
-/* ── Controls ── */
-.timerControls {
+/* ─── Controls ──────────────────────────────────────────────────────────── */
+.controls {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-top: 8px;
+  gap: 14px;
 }
 
-.controlBtn {
+.ctrlBtn {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  background: transparent;
-  color: var(--spice-text, #fff);
-  font-size: 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.2s, background 0.2s;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
 
   &:hover {
-    border-color: rgba(255, 255, 255, 0.5);
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #fff;
+    transform: scale(1.05);
   }
+  &:active { transform: scale(0.97); }
 }
 
-.controlBtnPrimary {
+.ctrlBtnMain {
   width: 60px;
   height: 60px;
-  font-size: 1.4rem;
-  background: var(--spice-button, #1db954);
-  border-color: var(--spice-button, #1db954);
-  color: #000;
+  background: linear-gradient(135deg, #818cf8, #6366f1);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
 
   &:hover {
-    background: var(--spice-button-active, #1ed760);
-    border-color: var(--spice-button-active, #1ed760);
-    color: #000;
+    background: linear-gradient(135deg, #a5b4fc, #818cf8);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 4px 28px rgba(99, 102, 241, 0.5);
   }
 }
 
-/* ── Playlist Picker ── */
+/* ─── Playlist Picker ───────────────────────────────────────────────────── */
 .pickerSection {
   width: 100%;
 }
 
 .sectionTitle {
-  font-size: 1rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  margin-bottom: 12px;
-  color: var(--spice-subtext, rgba(255, 255, 255, 0.7));
-  letter-spacing: 0.06em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 14px;
 }
 
 .levelGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-
-  @media (min-width: 600px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
 }
 
 .levelCard {
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid transparent;
-  border-radius: 12px;
-  padding: 16px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 16px 10px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
   text-align: center;
-  transition: background 0.2s, border-color 0.2s, transform 0.1s;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.09);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
   }
+  &:active { transform: translateY(0); }
 }
 
 .levelCardActive {
-  border-color: var(--spice-button, #1db954);
-  background: rgba(29, 185, 84, 0.12);
+  border-color: rgba(99, 102, 241, 0.6);
+  background: rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.3) inset,
+              0 4px 16px rgba(99, 102, 241, 0.15);
 }
 
 .levelEmoji {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   line-height: 1;
 }
 
 .levelName {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--spice-text, #fff);
+  color: #e2e8f0;
 }
 
 .levelDesc {
-  font-size: 0.75rem;
-  color: var(--spice-subtext, rgba(255, 255, 255, 0.5));
-  line-height: 1.3;
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.35;
 }
 
-/* ── Settings Panel ── */
+/* ─── Settings Panel ────────────────────────────────────────────────────── */
 .settingsPanel {
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  max-width: 480px;
+  gap: 20px;
+  max-width: 520px;
 }
 
 .settingsGroup {
   background: rgba(255, 255, 255, 0.04);
-  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
   overflow: hidden;
 }
 
 .groupTitle {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--spice-subtext, rgba(255, 255, 255, 0.5));
-  padding: 14px 20px 10px;
+  color: rgba(255, 255, 255, 0.35);
+  padding: 14px 18px 10px;
 }
 
 .settingRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px;
+  padding: 12px 18px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 12px;
 }
 
 .settingLabel {
-  font-size: 0.9375rem;
-  color: var(--spice-text, #fff);
+  font-size: 0.9rem;
+  color: #e2e8f0;
+  flex: 1;
 }
 
 .settingControl {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .settingValue {
-  min-width: 36px;
+  min-width: 40px;
   text-align: center;
-  font-size: 0.9375rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: var(--spice-text, #fff);
+  color: #f8fafc;
+  font-variant-numeric: tabular-nums;
 }
 
 .stepBtn {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  background: transparent;
-  color: var(--spice-text, #fff);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
   font-size: 1rem;
+  line-height: 1;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
-  transition: border-color 0.15s, background 0.15s;
+  transition: background 0.15s, border-color 0.15s;
 
   &:hover {
-    border-color: rgba(255, 255, 255, 0.5);
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
   }
 }
 
-/* ── Toggle ── */
+/* ─── Toggle ────────────────────────────────────────────────────────────── */
 .toggle {
-  width: 44px;
-  height: 24px;
-  border-radius: 12px;
+  width: 42px;
+  height: 22px;
+  border-radius: 11px;
   border: none;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.12);
   cursor: pointer;
   position: relative;
-  transition: background 0.2s;
   flex-shrink: 0;
+  transition: background 0.25s;
 }
 
 .toggleOn {
-  background: var(--spice-button, #1db954);
+  background: #6366f1;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
 }
 
 .toggleThumb {
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: #fff;
-  transition: transform 0.2s;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 
   .toggleOn & {
     transform: translateX(20px);
   }
 }
 
-/* ── Slider ── */
+/* ─── Slider ────────────────────────────────────────────────────────────── */
 .slider {
   -webkit-appearance: none;
   appearance: none;
-  width: 120px;
+  width: 110px;
   height: 4px;
   border-radius: 2px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
   outline: none;
   cursor: pointer;
 
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
-    appearance: none;
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    background: var(--spice-button, #1db954);
+    background: #6366f1;
     cursor: pointer;
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
   }
 }
